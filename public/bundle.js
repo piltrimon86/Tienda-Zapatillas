@@ -7,7 +7,12 @@ const thumbs = producto.querySelector('.producto__thumbs');
 // Color
 const propiedadColor = producto.querySelector('#propiedad-color');
 
-// Funcionalidad de las thumbbails
+// Cantidad
+const btnDisminuir = producto.querySelector('#disminuir-cantidad');
+const btnIncrementar = producto.querySelector('#incrementar-cantidad');
+const inputCantidad = producto.querySelector('#cantidad');
+
+// Funcionalidad de las thumbnails
 thumbs.addEventListener('click', (e) => {
 	if (e.target.tagName === 'IMG') {
 		const imagenSrc = e.target.src;
@@ -23,8 +28,20 @@ thumbs.addEventListener('click', (e) => {
 	}
 });
 
+// Funcionalidad de la propiedad color
 propiedadColor.addEventListener('click', (e) => {
 	if (e.target.tagName === 'INPUT') {
 		productoImagen.src = `./img/tennis/${e.target.value}.jpg`;
+	}
+});
+
+// Funcionalidad de disminuir o incrementar cantidad
+btnIncrementar.addEventListener('click', (e) => {
+	inputCantidad.value = parseInt(inputCantidad.value) + 1;
+});
+
+btnDisminuir.addEventListener('click', (e) => {
+	if (parseInt(inputCantidad.value) > 1) {
+		inputCantidad.value = parseInt(inputCantidad.value) - 1;
 	}
 });
