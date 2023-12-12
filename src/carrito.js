@@ -1,9 +1,14 @@
+import data from './data/productos'
 const botonesAbrirCarrito = document.querySelectorAll('[data-accion="abrir-carrito"]')
 const botonesCerrarCarrito = document.querySelectorAll('[data-accion="cerrar-carrito"]')
 const ventanaCarrito = document.getElementById('carrito')
 const btnAgregarCarrito = document.getElementById('agregar-al-carrito')
 const producto = document.getElementById('producto')
 const carrito = []
+const formatearMoneda = new Intl.NumberFormat('es-ES', {
+	style: 'currency',
+	currency: 'EUR',
+})
 
 const renderCarrito = () => {
 	ventanaCarrito.classList.add('carrito--active')
@@ -13,6 +18,16 @@ const renderCarrito = () => {
 	productosAnteriores.forEach((producto) => producto.remove())
 
 	carrito.forEach((productoCarrito) => {
+		// Obtenemos el precio del archivo productos.js
+		// Cuando el id del item del carrito sea el mismo que alguno de la lista
+
+		data.productos.forEach((productoBaseDatos) => {
+			if (productoBaseDatos.id === productoCarrito.id) {
+				productoCarrito.precio = productoBaseDatos.precio
+			}
+		})
+
+		// Establecemos la ruta de la imagen que vamos a querer mostrar
 		let thumbSrc = producto.querySelectorAll('.producto__thumb-img')[0].src
 		if (productoCarrito.color === 'rojo') {
 			thumbSrc = './img/thumbs/rojo.jpg'
@@ -26,7 +41,9 @@ const renderCarrito = () => {
 			<img src="${thumbSrc}" alt="" class="carrito__thumb" />
 			<div>
 				<p class="carrito__producto-nombre">
-					<span class="carrito__producto-cantidad">${productoCarrito.cantidad} x </span>${productoCarrito.nombre}
+					<span class="carrito__producto-cantidad">${productoCarrito.cantidad} x </span>${
+			productoCarrito.nombre
+		}
 				</p>
 				<p class="carrito__producto-propiedades">
 					Tamaño:<span>${productoCarrito.tamaño}</span> Color:<span>${productoCarrito.color}</span>
@@ -47,7 +64,9 @@ const renderCarrito = () => {
 				/>
 				</svg>
 			</button>
-				<p class="carrito__producto-precio">$500.00</p>
+				<p class="carrito__producto-precio">${formatearMoneda.format(
+					productoCarrito.precio * productoCarrito.cantidad
+				)}</p>
 		</div>
 		`
 
