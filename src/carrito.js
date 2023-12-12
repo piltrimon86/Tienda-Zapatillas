@@ -8,6 +8,10 @@ const carrito = []
 const renderCarrito = () => {
 	ventanaCarrito.classList.add('carrito--active')
 
+	// Eliminamos todos los productos anteriores para reiniciar el carrito desde cero
+	const productosAnteriores = ventanaCarrito.querySelectorAll('.carrito__producto')
+	productosAnteriores.forEach((producto) => producto.remove())
+
 	carrito.forEach((productoCarrito) => {
 		let thumbSrc = producto.querySelectorAll('.producto__thumb-img')[0].src
 		if (productoCarrito.color === 'rojo') {
@@ -15,8 +19,6 @@ const renderCarrito = () => {
 		} else if (productoCarrito.color === 'amarillo') {
 			thumbSrc = './img/thumbs/amarillo.jpg'
 		}
-
-		console.log(thumbSrc)
 
 		// Creamos una plantilla del codigo HTML
 		const plantillaProducto = `
