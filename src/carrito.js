@@ -193,5 +193,5 @@ ventanaCarrito.addEventListener('click', (e) => {
 // Boton de comprar para enviar la info del carrito a la pasarela
 
 ventanaCarrito.querySelector('#carrito__btn-comprar').addEventListener('click', () => {
-	alert('Accendiando a la pasarela de pago')
+	alert('Accediendo a la pasarela de pago')
 })
