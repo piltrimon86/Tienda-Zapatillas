@@ -6,58 +6,56 @@ const btnAgregarCarrito = document.getElementById('agregar-al-carrito')
 const producto = document.getElementById('producto')
 let carrito = []
 const formatearMoneda = new Intl.NumberFormat('es-ES', {
-	style: 'currency',
-	currency: 'EUR',
+    style: 'currency',
+    currency: 'EUR',
 })
 const notificacion = document.getElementById('notificacion')
 
 const renderCarrito = () => {
-	ventanaCarrito.classList.add('carrito--active')
+    ventanaCarrito.classList.add('carrito--active')
 
-	// Eliminamos todos los productos anteriores para reiniciar el carrito desde cero
-	const productosAnteriores = ventanaCarrito.querySelectorAll('.carrito__producto')
-	productosAnteriores.forEach((producto) => producto.remove())
+    // Eliminamos todos los productos anteriores para reiniciar el carrito desde cero
+    const productosAnteriores = ventanaCarrito.querySelectorAll('.carrito__producto')
+    productosAnteriores.forEach((producto) => producto.remove())
 
-	let total = 0
+    let total = 0
 
-	// Comprobamos si hay productos
-	if (carrito.length < 1) {
-		// Ponemos la clase de carrito vacio para que se muestre el mensaje en el carrito
-		ventanaCarrito.classList.add('carrito--vacio')
-	} else {
-		// Eliminamos el mensaje de carrito vacio
-		ventanaCarrito.classList.remove('carrito--vacio')
+    // Comprobamos si hay productos
+    if (carrito.length < 1) {
+        // Ponemos la clase de carrito vacio para que se muestre el mensaje en el carrito
+        ventanaCarrito.classList.add('carrito--vacio')
+    } else {
+        // Eliminamos el mensaje de carrito vacio
+        ventanaCarrito.classList.remove('carrito--vacio')
 
-		// Iteramos sobre cada producto y los mostramos
-		carrito.forEach((productoCarrito) => {
-			// Obtenemos el precio del archivo productos.js
-			// Cuando el id del item del carrito sea el mismo que alguno de la lista
+        // Iteramos sobre cada producto y los mostramos
+        carrito.forEach((productoCarrito) => {
+            // Obtenemos el precio del archivo productos.js
+            // Cuando el id del item del carrito sea el mismo que alguno de la lista
 
-			data.productos.forEach((productoBaseDatos) => {
-				if (productoBaseDatos.id === productoCarrito.id) {
-					productoCarrito.precio = productoBaseDatos.precio
+            data.productos.forEach((productoBaseDatos) => {
+                if (productoBaseDatos.id === productoCarrito.id) {
+                    productoCarrito.precio = productoBaseDatos.precio
 
-					total += productoBaseDatos.precio * productoCarrito.cantidad
-				}
-			})
+                    total += productoBaseDatos.precio * productoCarrito.cantidad
+                }
+            })
 
-			// Establecemos la ruta de la imagen que vamos a querer mostrar
-			let thumbSrc = producto.querySelectorAll('.producto__thumb-img')[0].src
-			if (productoCarrito.color === 'rojo') {
-				thumbSrc = './img/thumbs/rojo.jpg'
-			} else if (productoCarrito.color === 'amarillo') {
-				thumbSrc = './img/thumbs/amarillo.jpg'
-			}
+            // Establecemos la ruta de la imagen que vamos a querer mostrar
+            let thumbSrc = producto.querySelectorAll('.producto__thumb-img')[0].src
+            if (productoCarrito.color === 'rojo') {
+                thumbSrc = './img/thumbs/rojo.jpg'
+            } else if (productoCarrito.color === 'amarillo') {
+                thumbSrc = './img/thumbs/amarillo.jpg'
+            }
 
-			// Creamos una plantilla del codigo HTML
-			const plantillaProducto = `
+            // Creamos una plantilla del codigo HTML
+            const plantillaProducto = `
 	<div class="carrito__producto-info">
 		<img src="${thumbSrc}" alt="" class="carrito__thumb" />
 		<div>
 			<p class="carrito__producto-nombre">
-				<span class="carrito__producto-cantidad">${productoCarrito.cantidad} x </span>${
-				productoCarrito.nombre
-			}
+				<span class="carrito__producto-cantidad">${productoCarrito.cantidad} x </span>${productoCarrito.nombre}
 			</p>
 			<p class="carrito__producto-propiedades">
 				Tamaño:<span>${productoCarrito.tamaño}</span> Color:<span>${productoCarrito.color}</span>
@@ -78,120 +76,110 @@ const renderCarrito = () => {
 			/>
 			</svg>
 		</button>
-			<p class="carrito__producto-precio">${formatearMoneda.format(
-				productoCarrito.precio * productoCarrito.cantidad
-			)}</p>
+			<p class="carrito__producto-precio">${formatearMoneda.format(productoCarrito.precio * productoCarrito.cantidad)}</p>
 	</div>
 	`
 
-			// Creamos un div
-			const itemCarrito = document.createElement('div')
+            // Creamos un div
+            const itemCarrito = document.createElement('div')
 
-			// Le agregamos la clase de carrito__producto
-			itemCarrito.classList.add('carrito__producto')
+            // Le agregamos la clase de carrito__producto
+            itemCarrito.classList.add('carrito__producto')
 
-			// Insertamos la plantilla dentro del elemento itemCarrito
-			itemCarrito.innerHTML = plantillaProducto
+            // Insertamos la plantilla dentro del elemento itemCarrito
+            itemCarrito.innerHTML = plantillaProducto
 
-			//Agregamos el producto a la ventana del carrito
-			ventanaCarrito.querySelector('.carrito__body').appendChild(itemCarrito)
-		})
-	}
+            //Agregamos el producto a la ventana del carrito
+            ventanaCarrito.querySelector('.carrito__body').appendChild(itemCarrito)
+        })
+    }
 
-	ventanaCarrito.querySelector('.carrito__total').innerHTML =
-		formatearMoneda.format(total)
+    ventanaCarrito.querySelector('.carrito__total').innerHTML = formatearMoneda.format(total)
 }
 
 // Abrir carrito
 botonesAbrirCarrito.forEach((boton) => {
-	boton.addEventListener('click', (e) => {
-		renderCarrito()
-	})
+    boton.addEventListener('click', (e) => {
+        renderCarrito()
+    })
 })
 
 // Cerrar carrito (General)
 botonesCerrarCarrito.forEach((boton) => {
-	boton.addEventListener('click', (e) => {
-		ventanaCarrito.classList.remove('carrito--active')
-	})
+    boton.addEventListener('click', (e) => {
+        ventanaCarrito.classList.remove('carrito--active')
+    })
 })
 
 btnAgregarCarrito.addEventListener('click', (e) => {
-	const id = producto.dataset.productoId
-	const nombre = producto.querySelector('.producto__nombre').innerText
-	const cantidad = parseInt(producto.querySelector('#cantidad').value)
-	const color = producto.querySelector('#propiedad-color input:checked').value
-	const tamaño = producto.querySelector('#propiedad-tamaño input:checked').value
+    const id = producto.dataset.productoId
+    const nombre = producto.querySelector('.producto__nombre').innerText
+    const cantidad = parseInt(producto.querySelector('#cantidad').value)
+    const color = producto.querySelector('#propiedad-color input:checked').value
+    const tamaño = producto.querySelector('#propiedad-tamaño input:checked').value
 
-	if (carrito.length > 0) {
-		let productoEnCarrito = false
+    if (carrito.length > 0) {
+        let productoEnCarrito = false
 
-		carrito.forEach((item) => {
-			if (
-				item.id === id &&
-				item.nombre === nombre &&
-				item.color === color &&
-				item.tamaño === tamaño
-			) {
-				item.cantidad += cantidad
-				productoEnCarrito = true
-			}
-		})
+        carrito.forEach((item) => {
+            if (item.id === id && item.nombre === nombre && item.color === color && item.tamaño === tamaño) {
+                item.cantidad += cantidad
+                productoEnCarrito = true
+            }
+        })
 
-		if (!productoEnCarrito) {
-			carrito.push({
-				id: id,
-				nombre: nombre,
-				cantidad: cantidad,
-				color: color,
-				tamaño: tamaño,
-			})
-		}
-	} else {
-		carrito.push({
-			id: id,
-			nombre: nombre,
-			cantidad: cantidad,
-			color: color,
-			tamaño: tamaño,
-		})
-	}
+        if (!productoEnCarrito) {
+            carrito.push({
+                id: id,
+                nombre: nombre,
+                cantidad: cantidad,
+                color: color,
+                tamaño: tamaño,
+            })
+        }
+    } else {
+        carrito.push({
+            id: id,
+            nombre: nombre,
+            cantidad: cantidad,
+            color: color,
+            tamaño: tamaño,
+        })
+    }
 
-	// Establecemos la ruta de la imagen que vamos a querer mostrar
-	let thumbSrc = producto.querySelectorAll('.producto__thumb-img')[0].src
-	if (color === 'rojo') {
-		thumbSrc = './img/thumbs/rojo.jpg'
-	} else if (color === 'amarillo') {
-		thumbSrc = './img/thumbs/amarillo.jpg'
-	}
-	notificacion.querySelector('img').src = thumbSrc
+    // Establecemos la ruta de la imagen que vamos a querer mostrar
+    let thumbSrc = producto.querySelectorAll('.producto__thumb-img')[0].src
+    if (color === 'rojo') {
+        thumbSrc = './img/thumbs/rojo.jpg'
+    } else if (color === 'amarillo') {
+        thumbSrc = './img/thumbs/amarillo.jpg'
+    }
+    notificacion.querySelector('img').src = thumbSrc
 
-	// Mostramos la notificación
-	notificacion.classList.add('notificacion--active')
+    // Mostramos la notificación
+    notificacion.classList.add('notificacion--active')
 
-	// Despues de cinco segundos la ocultamos
-	setTimeout(() => notificacion.classList.remove('notificacion--active'), 5000)
+    // Despues de cinco segundos la ocultamos
+    setTimeout(() => notificacion.classList.remove('notificacion--active'), 5000)
 })
 
 // Botones eliminar producto del carrito
 
 ventanaCarrito.addEventListener('click', (e) => {
-	if (e.target.closest('button')?.dataset.accion === 'eliminar-item-carrito') {
-		const producto = e.target.closest('.carrito__producto')
-		const indexProducto = [
-			...ventanaCarrito.querySelectorAll('.carrito__producto'),
-		].indexOf(producto)
-		carrito = carrito.filter((item, index) => {
-			if (index !== indexProducto) {
-				return item
-			}
-		})
-		renderCarrito()
-	}
+    if (e.target.closest('button')?.dataset.accion === 'eliminar-item-carrito') {
+        const producto = e.target.closest('.carrito__producto')
+        const indexProducto = [...ventanaCarrito.querySelectorAll('.carrito__producto')].indexOf(producto)
+        carrito = carrito.filter((item, index) => {
+            if (index !== indexProducto) {
+                return item
+            }
+        })
+        renderCarrito()
+    }
 })
 
 // Boton de comprar para enviar la info del carrito a la pasarela
 
 ventanaCarrito.querySelector('#carrito__btn-comprar').addEventListener('click', () => {
-	alert('Accediendo a la pasarela de pago')
+    alert('Accediendo a la pasarela de pago')
 })
